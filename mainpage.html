@@ -1,0 +1,33 @@
+<head>
+<script src="http://localhost:8080/graph/d3.js" charset="utf-8"></script>
+<script src="http://localhost:8080/graph/mainpage.js" charset="utf-8"></script>
+</head>
+<style>
+div.alert {
+    color:red;
+    display:inline;
+    padding-left:20px;
+}
+
+p.listing {
+    margin-top:0px;
+    margin-bottom:0px;
+}
+</style>
+
+<body>
+    <p>
+        Welcome to the subreddit comment graph viewer. Mouseover italicized text for help.
+        <form id="FORM" action="" method="GET">
+            <em><span title="Untracked subreddits may take up to 5 minutes to get a graph, because the server's archive must be updated.">Subreddit name</span></em>: /r/<input type="text" name="SubredditName" value=""><div id="subredditError" class="alert"></div><br>
+            <em><span title="Culls users that haven't replied, or were replied to enough. It basically reduces clutter in graphs, and high values are recommended for larger subreddits. (recommended values 2~50, max 100)">Minimum comments posted/recieved </span></em>: <input type="number" value=2 name="Threshold" size=3><div id="limitError" class="alert"></div><br>
+            <em><span title="Choose the algorithm used to layout the graph. OpenOrd, the default, is great for large graphs. Yifan Hu is an alternative layout that is better than OpenOrd at small graphs with less than 100 users.">Algorithm:</span></em> <input type="radio" name="algorithm" value="openord" checked="true">OpenOrd   <input type="radio" name="algorithm" value="yifanhu">Yifan Hu<div id="algoError" class="alert"></div><br>
+            <input type="button" name="button" id="submit" value="Submit">
+        </form>
+    </p>
+    
+    <p>
+        Here is a list of tracked subreddits, which are automatically updated and do not require you to wait ~5 minutes for the archive to refresh:
+        <div id="tracked"></div>
+    </p>
+</body>

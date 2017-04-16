@@ -1,0 +1,21 @@
+<head>
+<link rel="stylesheet" type="text/css" href="http://localhost:8080/graph/viewerStyle.css">
+<script src="http://localhost:8080/graph/querystring.js" charset="utf-8"></script>
+<script src="http://localhost:8080/graph/d3.js" charset="utf-8"></script>
+<script src="http://localhost:8080/graph/viewer.js" charset="utf-8"></script>
+</head>
+
+<body>
+    <div id="graph"></div>
+    <div id="UI">
+        <div id="menu">
+            <button type="button" id="menu_control" onclick="showControls()">Controls</button>
+            <button type="button" id="menu_nodes" onclick="showNodes(true)">Hidden nodes</button>
+            <button type="button" id="menu_detail" onclick="showDetails()">Detail</button>
+        </div>
+        <div id="removedNodes" class="sidebar"></div>
+        <div id="controls" class="sidebar"></div>
+        <div id="details" class="sidebar"></div>
+        </div>
+    </div>    
+</body>

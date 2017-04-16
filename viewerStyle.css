@@ -1,0 +1,135 @@
+body {
+    overflow:hidden;
+}
+
+#UI {
+    width:30%;
+    max-width:500px;
+    height:99%;
+    right:0px;
+    position:fixed;
+    padding-right:1%;
+}
+
+#graph {
+    float:left;
+    width:69%;
+}
+
+.javascriptlink {
+    cursor:pointer;
+    color:black;
+    border-bottom-style:solid;
+    border-width:1px;
+}
+
+.list {
+    overflow:auto;
+    min-height:10%;
+    height:90%;
+}
+
+a:hover,a.hover {
+    text-decoration:underline;
+}
+
+.sidebar {
+    overflow:auto;
+    max-height:90%;
+}
+
+.commentHolder {
+    overflow:auto;
+    margin:0 1px 8px 8px;
+}
+
+.comment {
+    width:90%;
+    min-width:50px;
+    overflow:auto;
+    padding:5px 10px;
+    border-style:solid;
+    border-width:1px;
+    margin:0 1px 5px 5px;
+}
+
+.foldedComment {
+    width:90%;
+    min-width:50px;
+    overflow:auto;
+    padding:10;
+    border-style:solid;
+    border-width:1px;
+    margin:0 1px 8px 10px;
+}
+
+.foldedComment>.unfoldedCommentContent {
+    display:none;
+}
+
+span.foldedName {
+    font-style:italic;
+    color:#606060;
+}
+
+.comment>.foldedCommentContent {
+    display:none;
+}
+
+.comment>.unfoldedCommentContent {
+}
+
+.unfoldedCommentContent>p {
+    margin-top:0;
+}
+
+span.username {
+    color:#2E3B5C;
+    font-size:18px;
+    padding-right:10;
+    padding-left:10;
+    padding-bottom:0;
+}
+
+span.points {
+    color:gray;
+    font-size:12px;
+}
+
+.foldedCommentContent>span.points {
+    font-style:italic;
+}
+
+span.body {
+    margin-left: 5px;
+}
+
+span.foldbutton {
+    color:blue;
+    margin:0;
+    padding:0;
+    cursor:pointer;
+}
+
+span.foldbutton:hover {
+    background-color:#0066CC;
+    color:white;
+}
+
+span.unfoldbutton {
+    color:gray;
+    cursor:pointer;
+}
+
+span.unfoldbutton:hover {
+    color:blue;
+    background-color:#0066CC;
+    color:white;
+}
+
+a.context {
+    color:#707070;
+    font-size:12px;
+    cursor:pointer;
+    text-decoration:none;
+}
