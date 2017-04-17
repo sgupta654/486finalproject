@@ -48,7 +48,7 @@ def stripAndSave(link):
         subreddit = data[0]["data"]["children"][0]["data"]["subreddit"]
         title = data[0]["data"]["children"][0]["data"]["permalink"]
         # Extract the unique part of the Reddit URL, ie the parts after 'comment/'
-        m = re.search('comments/([\w\d]+/[\w+]+)', title) 
+        m = re.search('comments/([\w\d]+/[\w+]+)', title)
         title = m.group(1)
         title = re.sub('/', ':', title)
         filename = "r/" + subreddit + "/" + title + ".json"
@@ -73,22 +73,23 @@ def stripAndSave(link):
     endtime = time.time()
     if endtime - starttime < 2:
         time.sleep(2 - (endtime - starttime))
-    
+
 
 log = open("log.log", "a")
 ts = time.time()
 log.write("Started at " + datetime.datetime.fromtimestamp(ts).strftime("%m-%d-%y %H:%M:%S") + "\n")
 loopstart = time.time()
-for reddit in reddits:    
-    print "Reading from subreddit /r/%s" % (reddit)
-    r = requests.get(r'http://www.reddit.com/r/%s/top.json?limit=100&t=week' % (reddit), headers = headers)
+for reddit in reddits:
+    sub_r = reddit.strip()
+    print "Reading from subreddit /r/%s" % (sub_r)
+    r = requests.get(r'http://www.reddit.com/r/%s/top.json?limit=100&t=week' % (sub_r), headers = headers)
     data = r.json()
 
     # A list of reddit Thing objects that are posts.
     postedThings = data["data"]["children"]
     counter = 1;
     for thing in postedThings:
-        if not thing["data"]["stickied"] == 1: 
+        if not thing["data"]["stickied"] == 1:
             print str(counter) + ": " + thing["data"]["title"]
             counter += 1
             stripAndSave(thing["data"]["permalink"])
