@@ -49,7 +49,7 @@ def readComments(obj, commentCount):
 		if 'replies' in i['data']: 
 			if len(i['data']['replies']) > 0:
 				readComments(i['data']['replies']['data']['children'], commentCount)
-directory = '/Users/sandeepgupta/Desktop/EECS_486/final_project/get-comments-json/RedditSocialGrapher/r'
+directory = '/Users/sandeepgupta/Desktop/EECS_486/final_project/486finalproject/r'
 for subreddit in os.listdir(directory):
 	if subreddit != '.DS_Store':
 		for my_file in os.listdir(directory+'/'+subreddit):
