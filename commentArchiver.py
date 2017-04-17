@@ -82,17 +82,20 @@ loopstart = time.time()
 for reddit in reddits:
     sub_r = reddit.strip()
     print "Reading from subreddit /r/%s" % (sub_r)
-    r = requests.get(r'http://www.reddit.com/r/%s/top.json?limit=100&t=week' % (sub_r), headers = headers)
-    data = r.json()
+    testingForNSFW = requests.get(r'http://www.reddit.com/r/%s' % (sub_r), headers = headers)
+    if "over18" in testingForNSFW.text:
+        print "over18 " + sub_r 
+    # r = requests.get(r'http://www.reddit.com/r/%s/top.json?limit=100&t=week' % (sub_r), headers = headers)
+    # data = r.json()
 
-    # A list of reddit Thing objects that are posts.
-    postedThings = data["data"]["children"]
-    counter = 1;
-    for thing in postedThings:
-        if not thing["data"]["stickied"] == 1:
-            print str(counter) + ": " + thing["data"]["title"]
-            counter += 1
-            stripAndSave(thing["data"]["permalink"])
+    # # A list of reddit Thing objects that are posts.
+    # postedThings = data["data"]["children"]
+    # counter = 1;
+    # for thing in postedThings:
+    #     if not thing["data"]["stickied"] == 1:
+    #         print str(counter) + ": " + thing["data"]["title"]
+    #         counter += 1
+    #         stripAndSave(thing["data"]["permalink"])
     loopend = time.time()
 
 print str(loopend - loopstart) + " seconds elapsed, total"
