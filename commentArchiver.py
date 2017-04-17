@@ -84,10 +84,10 @@ for reddit in reddits:
     print "Reading from subreddit /r/%s" % (sub_r)
     testingForNSFW = requests.get(r'http://www.reddit.com/r/%s' % (sub_r), headers = headers)
     if "over18" in testingForNSFW.text:
-        print "over18 " + sub_r 
+        print "over18 " + sub_r
         continue
 
-    r = requests.get(r'http://www.reddit.com/r/%s/top.json?limit=1&t=week' % (sub_r), headers = headers)
+    r = requests.get(r'http://www.reddit.com/r/%s/top.json?limit=100&t=week' % (sub_r), headers = headers)
     data = r.json()
 
     # A list of reddit Thing objects that are posts.

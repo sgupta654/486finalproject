@@ -68,6 +68,7 @@ comment_corpus = {}
 user_links = {}
 for subreddit in os.listdir(directory):
 	if subreddit != '.DS_Store':
+		print(subreddit)
 		for my_file in os.listdir(directory+'/'+subreddit):
 			#print subreddit + ' ' + my_file
 			json_data = open(directory+'/'+subreddit+'/'+my_file)
@@ -76,3 +77,24 @@ for subreddit in os.listdir(directory):
 			readComments(commentThread[1]['data']['children'], commentCount, subreddit, comment_corpus, user_links)
 
 #print(comment_corpus)
+
+# Format user link output to file
+# in format:
+#		subreddit1 subreddit2
+# This represents two links, one going each direction.
+ul = open('userLinks.txt', 'w')
+subreddit = set()
+
+for user in user_links:
+	subs = list(user_links[user])
+	for x in xrange(len(subs)):
+		for y in range(x+1, len(subs)):
+			temp = [subs[x], subs[y]]
+			temp.sort()
+			tmp = (temp[0], temp[1])
+			subreddit.add(tmp)
+
+for pair in subreddit:
+	line = pair[0] + ' ' + pair[1] + '\n'
+	ul.write(line)
+
