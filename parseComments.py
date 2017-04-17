@@ -1,9 +1,10 @@
 import json
 import os
+import sets
 
 
 # Recursive function to read comments
-def readComments(obj, commentCount):
+def readComments(obj, commentCount, subreddit, comment_corpus, user_links):
 	newComments = 0
 	existingComments = 0
 	for i in obj:
@@ -40,22 +41,38 @@ def readComments(obj, commentCount):
 			content = i['data']['selftext']
 			score = i['data']['score']
 
+		# add contents to the comment corpus
+		if subreddit in comment_corpus:
+			temp_content = ' ' + content
+			comment_corpus[subreddit] += temp_content
+		else:
+			comment_corpus[subreddit] = content
 
-		print author + ' ' + content + '\n'
-		commentCount = commentCount + 1
-		print commentCount
+		# Update user links
+		if author in user_links:
+			user_links[author].add(subreddit)
+		else:
+			user_links[author] = {subreddit}
+
+		#print author + ' ' + content + '\n'
+		#commentCount = commentCount + 1
+		#print commentCount
 
 		# Does it have a reply?
-		if 'replies' in i['data']: 
+		if 'replies' in i['data']:
 			if len(i['data']['replies']) > 0:
-				readComments(i['data']['replies']['data']['children'], commentCount)
-directory = '/Users/sandeepgupta/Desktop/EECS_486/final_project/get-comments-json/RedditSocialGrapher/r'
+				readComments(i['data']['replies']['data']['children'], commentCount, subreddit, comment_corpus, user_links)
+
+directory = './r'
+comment_corpus = {}
+user_links = {}
 for subreddit in os.listdir(directory):
 	if subreddit != '.DS_Store':
 		for my_file in os.listdir(directory+'/'+subreddit):
-			print subreddit + ' ' + my_file
+			#print subreddit + ' ' + my_file
 			json_data = open(directory+'/'+subreddit+'/'+my_file)
 			commentThread = json.load(json_data)
 			commentCount = 0
-			readComments(commentThread[1]['data']['children'], commentCount)
+			readComments(commentThread[1]['data']['children'], commentCount, subreddit, comment_corpus, user_links)
 
+#print(comment_corpus)
