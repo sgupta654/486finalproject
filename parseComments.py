@@ -1,6 +1,10 @@
 import json
 import os
 import sets
+import operator
+import re
+from stemmer import PorterStemmer
+from preprocess import removeSGML, tokenizeText, removeStopwords, stemWords
 
 
 # Recursive function to read comments
@@ -76,7 +80,24 @@ for subreddit in os.listdir(directory):
 			commentCount = 0
 			readComments(commentThread[1]['data']['children'], commentCount, subreddit, comment_corpus, user_links)
 
-#print(comment_corpus)
+tokenized_comments = {}
+
+for key, value in comment_corpus.items():
+	listWithoutSGML = removeSGML(value)
+	tokenizedText = tokenizeText(listWithoutSGML)
+	removedStopWords = removeStopwords(tokenizedText)
+	tokenized_comments[key] = removedStopWords
+
+print tokenized_comments
+# for key, value in tokenized_comments.items():
+# 	if key != "announcements":
+# 		for it in value:
+# 			if '/r/' in it:
+# 				temp = re.search('(?<=\/r\/)[A-Za-z]+(?=\/)', it)
+# 				subr = temp.group(0)
+# 				if subr != key and comment_corpus.has_key(subr):
+# 					print 'true ' + key + ' ' + subr
+	
 
 # Format user link output to file
 # in format:
@@ -97,4 +118,3 @@ for user in user_links:
 for pair in subreddit:
 	line = pair[0] + ' ' + pair[1] + '\n'
 	ul.write(line)
-
