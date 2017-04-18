@@ -72,7 +72,10 @@ for subreddit in os.listdir(directory):
 		for my_file in os.listdir(directory+'/'+subreddit):
 			#print subreddit + ' ' + my_file
 			json_data = open(directory+'/'+subreddit+'/'+my_file)
-			commentThread = json.load(json_data)
+			try:
+				commentThread = json.load(json_data)
+			except ValueError:
+				continue
 			commentCount = 0
 			readComments(commentThread[1]['data']['children'], commentCount, subreddit, comment_corpus, user_links)
 
