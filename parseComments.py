@@ -287,7 +287,7 @@ def readComments(obj, commentCount, subreddit, comment_corpus, user_links, comme
 		#print author + ' ' + content + '\n'
 		#commentCount = commentCount + 1
 		#print commentCount
-		if comment_counts[subreddit] > 500:
+		if comment_counts[subreddit] > 200:
 			return
 
 		# Does it have a reply?
