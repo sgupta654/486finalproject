@@ -10,7 +10,7 @@ import datetime
 
 
 headers = {
-            'User-Agent': "'Comment social graph data collector' by /u/Corticotropin"
+            'User-Agent': "University project for subreddit suggester"
           }
 
 unneededFields = ["banned_by", "saved", "approved_by", "author_flair_css_class", "author_flair_text", "distinguished", "num_reports"]
