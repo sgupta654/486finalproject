@@ -17,7 +17,7 @@ from math import log10
 # second weighting system is binary term independence
 
 # inverted_index = {token1: {docid1: w1, docid2: w2, ...}, ...}
-def indexDocument(tokenized_content, doc_weighting, query_weighting, inverted_index, doc_id):
+def indexDocument(tokenized_content, inverted_index, doc_id):
     token_freqs = {}
     max_freq = 0.
     for token in tokenized_content:
@@ -36,12 +36,11 @@ def indexDocument(tokenized_content, doc_weighting, query_weighting, inverted_in
                 inverted_index[token] = {doc_id: token_freqs[token]}
     return token_freqs
 
-def retrieveDocuments(query, inverted_index, doc_weighting, query_weighting, document_frequencies):
+def retrieveDocuments(query, inverted_index, document_frequencies):
     query = removeSGML(query)
     tokenized_query = tokenizeText(query)
     tokenized_query = removeStopwords(tokenized_query)
     tokenized_query = stemWords(tokenized_query)
-
     # find all doc_ids to perform a similarity test on
     doc_ids = set()
     query_frequencies = {}
@@ -84,12 +83,13 @@ def retrieveDocuments(query, inverted_index, doc_weighting, query_weighting, doc
     return similarity_scores
 
 
-def vsm(doc_weighting, query_weighting, tokenized_subreddits, query):
+# assume that query is already preprocessed
+def vsm(tokenized_subreddits, query):
     # build inverted_index
     index = {}
     token_freqs = {}
     for subreddit in tokenized_subreddits.keys():
-        doc_token_freq = indexDocument(tokenized_subreddits[subreddit], doc_weighting, query_weighting, index, doc_id)
+        doc_token_freq = indexDocument(tokenized_subreddits[subreddit], index, doc_id)
         # find the number of documents a word appears in
         for token in doc_token_freq:
             if token_freqs.has_key(token):
@@ -105,5 +105,5 @@ def vsm(doc_weighting, query_weighting, tokenized_subreddits, query):
         for doc_id in index[token].keys():
             index[token][doc_id] = index[token][doc_id] * idf_weight
 
-    similarity_scores = retrieveDocuments(query, index, doc_weighting, query_weighting, token_freqs)
+    similarity_scores = retrieveDocuments(query, index, token_freqs)
     return similarity_scores
