@@ -52,7 +52,7 @@ node_link = sys.argv[1]
 urls = open(node_link)
 
 
-threshold = 0.0
+threshold = 0.001
 url_score = {}
 in_edges = {}
 out_edges = {}

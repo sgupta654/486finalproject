@@ -37,10 +37,6 @@ def indexDocument(tokenized_content, inverted_index, doc_id):
     return token_freqs
 
 def retrieveDocuments(query, inverted_index, document_frequencies):
-    query = removeSGML(query)
-    tokenized_query = tokenizeText(query)
-    tokenized_query = removeStopwords(tokenized_query)
-    tokenized_query = stemWords(tokenized_query)
     # find all doc_ids to perform a similarity test on
     doc_ids = set()
     query_frequencies = {}
@@ -84,12 +80,15 @@ def retrieveDocuments(query, inverted_index, document_frequencies):
 
 
 # assume that query is already preprocessed
-def vsm(tokenized_subreddits, query):
+def vsm(tokenized_subreddits):
     # build inverted_index
     index = {}
     token_freqs = {}
+    N = 0
     for subreddit in tokenized_subreddits.keys():
-        doc_token_freq = indexDocument(tokenized_subreddits[subreddit], index, doc_id)
+        print(subreddit)
+        N += 1
+        doc_token_freq = indexDocument(tokenized_subreddits[subreddit], index, subreddit)
         # find the number of documents a word appears in
         for token in doc_token_freq:
             if token_freqs.has_key(token):
@@ -98,12 +97,11 @@ def vsm(tokenized_subreddits, query):
                 token_freqs[token] = 1
 
     # calc and store length of each document?
-    N = 1400 # TODO change
     #calc idf weights and multiply
     for token, frequency in token_freqs.items():
         idf_weight = log10(N/frequency)
         for doc_id in index[token].keys():
             index[token][doc_id] = index[token][doc_id] * idf_weight
 
-    similarity_scores = retrieveDocuments(query, index, token_freqs)
-    return similarity_scores
+    #similarity_scores = retrieveDocuments(query, index, token_freqs)
+    return index, token_freqs
