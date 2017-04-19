@@ -271,8 +271,9 @@ def readComments(obj, commentCount, subreddit, comment_corpus, user_links, comme
 
 		# add contents to the comment corpus
 		if subreddit in comment_corpus:
-			temp_content = ' ' + content
-			comment_corpus[subreddit] += temp_content
+			if comment_counts[subreddit] < 10:
+				temp_content = ' ' + content
+				comment_corpus[subreddit] += temp_content
 			comment_counts[subreddit] += 1
 		else:
 			comment_corpus[subreddit] = content
@@ -287,7 +288,7 @@ def readComments(obj, commentCount, subreddit, comment_corpus, user_links, comme
 		#print author + ' ' + content + '\n'
 		#commentCount = commentCount + 1
 		#print commentCount
-		if comment_counts[subreddit] > 200:
+		if comment_counts[subreddit] > 500:
 			return
 
 		# Does it have a reply?

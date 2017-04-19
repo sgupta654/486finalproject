@@ -21,22 +21,24 @@ def suggest(queries, vectorspace, page_rank):
         suggested_docs = retrieveDocuments(comment_corpus[query[3:]], vectorspace[0], vectorspace[1])
         continue
     elif query in comment_corpus:
-      suggested_docs = vsm(comment_corpus[query], vectorspace[0], vectorspace[1])
+      suggested_docs = retrieveDocuments(comment_corpus[query], vectorspace[0], vectorspace[1])
       continue
 
     tokenized_query = tokenizeText(query)
     tokenized_query = removeStopwords(tokenized_query)
     tokenized_query = stemWords(tokenized_query)
-    suggested_docs = vsm(comment_corpus, tokenized_query)
+    suggested_docs = retrieveDocuments(tokenized_query, vectorspace[0], vectorspace[1])
+    #print(suggested_docs)
     for key in suggested_docs:
       pair = (key, suggested_docs[key])
       docs.append(pair)
     docs.sort(key=lambda x: x[1], reverse=True)
 
     for x in xrange(30):
+      #print(docs)
       doc_score = docs[x][1]
       if docs[x][0] in page_rank:
-        doc_score += log10(page_rank[docs[x][0]])
+        doc_score += log10(float(page_rank[docs[x][0]]))
       weighted_term = (docs[x][0], doc_score)
       results.append(weighted_term)
     results.sort(key=lambda x: x[1], reverse=True)
@@ -44,6 +46,7 @@ def suggest(queries, vectorspace, page_rank):
     for pair in results[0:9]:
       print('--> ' + str(pair[0]) + ' ' + str(pair[1]))
     print('~~~~~~~~~~~~~~~~~~')
+  del(queries)
   return
 
 page_rank = {}
@@ -53,11 +56,15 @@ for line in pr_input:
   score = line.split()[1]
   page_rank[sub] = score
 
+index = open('tfidf_index.json', 'w')
+tokeF = open('toke_freqs.json', 'w')
 comment_input = open('comments.json', 'r')
 comment_corpus = json.load(comment_input)
 print('... Preparing tf-idf inverted index ...')
 vectorspace = vsm(comment_corpus)
 queries = []
+json.dump(vectorspace[0], index)
+json.dump(vectorspace[1], tokeF)
 
 #If given a file, read in queries from file,
 #else, prompt user for a query

@@ -41,7 +41,7 @@ def retrieveDocuments(query, inverted_index, document_frequencies):
     doc_ids = set()
     query_frequencies = {}
     max_freq = 0
-    for token in tokenized_query:
+    for token in query:
         if inverted_index.has_key(token):
             doc_ids.update(inverted_index[token].keys())
         if query_frequencies.has_key(token):
@@ -86,7 +86,7 @@ def vsm(tokenized_subreddits):
     token_freqs = {}
     N = 0
     for subreddit in tokenized_subreddits.keys():
-        print(subreddit)
+        print(subreddit + ' ' + str(N))
         N += 1
         doc_token_freq = indexDocument(tokenized_subreddits[subreddit], index, subreddit)
         # find the number of documents a word appears in
