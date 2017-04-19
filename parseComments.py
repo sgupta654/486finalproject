@@ -325,14 +325,27 @@ for key, value in comment_corpus.items():
 json_out = open('comments.json', 'w')
 json.dump(tokenized_comments, json_out)
 json_out.close()
+
+
+# directLinks = open("directLinks.txt", "w")
+# indirectLinks = open("indirectLinks.txt", "w")
 # for key, value in tokenized_comments.items():
-# 	if key != "announcements":
-# 		for it in value:
-# 			if '/r/' in it:
-# 				temp = re.search('(?<=\/r\/)[A-Za-z]+(?=\/)', it)
-# 				subr = temp.group(0)
-# 				if subr != key and comment_corpus.has_key(subr):
-# 					print 'true ' + key + ' ' + subr
+#   for it in value:
+#     try:
+#       temp = re.search('(?<=\/r\/)[^\/]+', it)
+#       subr = temp.group(0)
+#       if subr != key and tokenized_comments.has_key(subr):
+#         directLinks.write(key + ' ' + subr + '\n')
+#     except:
+#       try:
+#         lone = re.search('(?<=\/r\/).+', it)
+#         l_subr = lone.group(0)
+#         if l_subr != key and tokenized_comments.has_key(l_subr):
+#           directLinks.write(key + ' ' + l_subr + '\n')
+#       except:
+#         if it != key and tokenized_comments.has_key(it):
+#           indirectLinks.write(key + ' ' + it + '\n')
+#         continue
 
 
 # Format user link output to file
