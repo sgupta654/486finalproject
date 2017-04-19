@@ -8,26 +8,24 @@ from operator import itemgetter
 from math import log10
 
 def suggest(queries, vectorspace, page_rank):
-  for query in queries:
+  for q in queries:
+    query = q.lower()
     suggested_docs = {}
     docs = []
     results = []
     if 'r/' in query:
       if query[2:] in comment_corpus:
         suggested_docs = retrieveDocuments(comment_corpus[query[2:]], vectorspace[0], vectorspace[1])
-        continue
     elif '/r/' in query:
       if query[3:] in comment_corpus:
         suggested_docs = retrieveDocuments(comment_corpus[query[3:]], vectorspace[0], vectorspace[1])
-        continue
     elif query in comment_corpus:
       suggested_docs = retrieveDocuments(comment_corpus[query], vectorspace[0], vectorspace[1])
-      continue
-
-    tokenized_query = tokenizeText(query)
-    tokenized_query = removeStopwords(tokenized_query)
-    tokenized_query = stemWords(tokenized_query)
-    suggested_docs = retrieveDocuments(tokenized_query, vectorspace[0], vectorspace[1])
+    else:
+      tokenized_query = tokenizeText(query)
+      tokenized_query = removeStopwords(tokenized_query)
+      tokenized_query = stemWords(tokenized_query)
+      suggested_docs = retrieveDocuments(tokenized_query, vectorspace[0], vectorspace[1])
     #print(suggested_docs)
     for key in suggested_docs:
       pair = (key, suggested_docs[key])
@@ -85,12 +83,12 @@ else:
     elif q == '--crawl':
       #Crawl over all the Subreddits in the tracked_subreddits file
       #Placing returned json commment trees under the ./r/ directory
-      execfile('commentArchiver.py &')
+      execfile('python commentArchiver.py &')
       #Parse all the comments placed in the ./r/ directory for each
       # subreddit
-      execfile('parseComments.py &')
+      execfile('python parseComments.py &')
       #Update the pageRank
-      execfile('RedditRank.py userLinks.txt')
+      execfile('python RedditRank.py userLinks.txt')
 
       page_rank = {}
       pr_input = open('redditPagerankings', 'r')

@@ -272,7 +272,7 @@ def readComments(obj, commentCount, subreddit, comment_corpus, user_links, comme
 		# add contents to the comment corpus
 		if subreddit in comment_corpus:
 			if comment_counts[subreddit] < 10:
-				temp_content = ' ' + content
+				temp_content = ' ' + content.lower()
 				comment_corpus[subreddit] += temp_content
 			comment_counts[subreddit] += 1
 		else:
@@ -309,7 +309,7 @@ for subreddit in os.listdir(directory):
 				json_data = open(directory+'/'+subreddit+'/'+my_file)
 				commentThread = json.load(json_data)
 				commentCount = 0
-				readComments(commentThread[1]['data']['children'], commentCount, subreddit, comment_corpus, user_links, comment_counts)
+				readComments(commentThread[1]['data']['children'], commentCount, subreddit.lower(), comment_corpus, user_links, comment_counts)
 			except ValueError:
 				continue
 		#print('comments: ' + str(comment_counts[subreddit]))
