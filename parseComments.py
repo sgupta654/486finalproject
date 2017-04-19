@@ -271,7 +271,7 @@ def readComments(obj, commentCount, subreddit, comment_corpus, user_links, comme
 
 		# add contents to the comment corpus
 		if subreddit in comment_corpus:
-			if comment_counts[subreddit] < 10:
+			if comment_counts[subreddit] < 50:
 				temp_content = ' ' + content.lower()
 				comment_corpus[subreddit] += temp_content
 			comment_counts[subreddit] += 1

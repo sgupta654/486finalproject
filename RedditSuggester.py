@@ -10,6 +10,9 @@ from math import log10
 def suggest(queries, vectorspace, page_rank):
   for q in queries:
     query = q.lower()
+    if 'prequelmemes' in query:
+      print('A surprise to be sure, but a welcome one!')
+
     suggested_docs = {}
     docs = []
     results = []
@@ -26,14 +29,24 @@ def suggest(queries, vectorspace, page_rank):
       tokenized_query = removeStopwords(tokenized_query)
       tokenized_query = stemWords(tokenized_query)
       suggested_docs = retrieveDocuments(tokenized_query, vectorspace[0], vectorspace[1])
-    #print(suggested_docs)
+
+    if suggested_docs == {}:
+      print('Sorry, we could not find anything for you')
+      print('Please try a more specific query, and in the')
+      print('meantime, here are our favorite Subreddits!')
+      for x in xrange(10):
+        print('--> prequelmemes')
+      print('~~~~~~~~~~~~~~~~~~')
+      continue
+
     for key in suggested_docs:
       pair = (key, suggested_docs[key])
       docs.append(pair)
     docs.sort(key=lambda x: x[1], reverse=True)
 
     for x in xrange(30):
-      #print(docs)
+      if x >= len(docs):
+        break
       doc_score = docs[x][1]
       if docs[x][0] in page_rank:
         doc_score += log10(float(page_rank[docs[x][0]]))
@@ -41,10 +54,14 @@ def suggest(queries, vectorspace, page_rank):
       results.append(weighted_term)
     results.sort(key=lambda x: x[1], reverse=True)
     print('Query: ' + query)
-    for pair in results[0:9]:
-      print('--> ' + str(pair[0]) + ' ' + str(pair[1]))
-    print('~~~~~~~~~~~~~~~~~~')
-  del(queries)
+    if len(results) >= 10:
+      for pair in results[0:9]:
+        print('--> ' + str(pair[0]) + ' ' + str(pair[1]))
+      print('~~~~~~~~~~~~~~~~~~')
+    else:
+      for pair in results:
+        print('--> ' + str(pair[0]) + ' ' + str(pair[1]))
+      print('~~~~~~~~~~~~~~~~~~')
   return
 
 page_rank = {}
@@ -54,18 +71,23 @@ for line in pr_input:
   score = line.split()[1]
   page_rank[sub] = score
 
-index = open('tfidf_index.json', 'w')
-tokeF = open('toke_freqs.json', 'w')
+tfidf_input = json.load(open('tfidf_index.json', 'r'))
+toke_in = json.load(open('toke_freqs.json', 'r'))
+vectorspace = [tfidf_input, toke_in]
+
 comment_input = open('comments.json', 'r')
 comment_corpus = json.load(comment_input)
-print('... Preparing tf-idf inverted index ...')
-vectorspace = vsm(comment_corpus)
-queries = []
-json.dump(vectorspace[0], index)
-json.dump(vectorspace[1], tokeF)
+if vectorspace == []:
+  print('... Preparing tf-idf inverted index ...')
+  index = open('tfidf_index.json', 'w')
+  tokeF = open('toke_freqs.json', 'w')
+  vectorspace = vsm(comment_corpus)
+  json.dump(vectorspace[0], index)
+  json.dump(vectorspace[1], tokeF)
 
 #If given a file, read in queries from file,
 #else, prompt user for a query
+queries = []
 if len(sys.argv) == 2:
   query_file = open(sys.argv[1], 'r')
   for line in query_file:
@@ -106,3 +128,4 @@ else:
     else:
       queries.append(q)
       suggest(queries, vectorspace, page_rank)
+      queries = []
